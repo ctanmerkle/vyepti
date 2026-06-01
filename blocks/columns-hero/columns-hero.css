@@ -2,9 +2,15 @@
   padding: 0;
 }
 
+.section.columns-hero-container {
+  margin: 0;
+  padding: 0;
+}
+
 .columns-hero {
   position: relative;
   overflow: hidden;
+  background: linear-gradient(135deg, #e8f4f8 0%, #d4eef5 40%, #b8e4ef 100%);
 }
 
 .columns-hero > div {
@@ -15,19 +21,25 @@
 .columns-hero > div > div {
   position: relative;
   flex: 1;
-  min-height: 300px;
-  overflow: hidden;
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 24px;
 }
 
 .columns-hero > div > div p:has(picture) {
   margin: 0;
   line-height: 0;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
 
 .columns-hero > div > div picture {
   display: block;
-  position: absolute;
-  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .columns-hero > div > div picture img {
@@ -39,103 +51,102 @@
 .columns-hero > div > div p:not(:has(picture)) {
   position: relative;
   z-index: 1;
-  color: #fff;
+  color: var(--brand-dark);
   margin: 0;
-  padding: 8px 24px;
+  padding: 4px 0;
   font-size: 18px;
   line-height: 1.4;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
+/* stylelint-disable-next-line no-descending-specificity */
 .columns-hero > div > div p:has(em) {
   position: absolute;
-  bottom: 8px;
-  left: 8px;
-  font-size: 12px;
+  bottom: 12px;
+  right: 16px;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--text-color);
   padding: 0;
   opacity: 0.8;
+  z-index: 1;
+}
+
+.columns-hero > div > div:first-child p:nth-child(2) {
+  font-size: 18px;
+  color: var(--brand-dark);
 }
 
 .columns-hero > div > div:first-child p:nth-child(3) {
   font-size: 48px;
   font-weight: 700;
-  padding-bottom: 20px;
+  color: var(--brand-dark);
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.columns-hero > div > div:last-child p:nth-child(2) {
+  font-size: 18px;
+  color: var(--brand-dark);
 }
 
 .columns-hero > div > div:last-child p:nth-child(3) {
   font-size: 48px;
   font-weight: 700;
-  color: #fff;
-}
-
-.columns-hero > div > div:last-child p:nth-child(3)::first-line {
-  color: #fff;
+  color: var(--brand-teal);
+  line-height: 1.1;
+  margin-bottom: 8px;
 }
 
 .columns-hero > div > div:last-child p:nth-child(4) {
   font-size: 16px;
-  max-width: 280px;
+  max-width: 320px;
+  color: var(--text-color);
+  line-height: 1.5;
+  margin-top: 8px;
 }
 
+/* stylelint-disable-next-line no-descending-specificity */
 .columns-hero > div > div:last-child p:has(a) {
-  margin-top: 16px;
+  margin-top: 20px;
 }
 
 .columns-hero > div > div:last-child a {
-  color: #fff;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 16px;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  border-bottom: 2px solid #fff;
-  padding-bottom: 4px;
+  gap: 10px;
+  background-color: var(--brand-red);
+  color: #fff;
+  padding: 14px 32px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.columns-hero > div > div:last-child a::after {
+  content: "\2192";
+  font-size: 20px;
 }
 
 .columns-hero > div > div:last-child a:hover {
-  opacity: 0.8;
+  background-color: #a02348;
+  text-decoration: none;
 }
 
 @media (width >= 900px) {
   .columns-hero > div {
     flex-direction: row;
+    min-height: 500px;
   }
 
   .columns-hero > div > div {
     min-height: 500px;
+    padding: 60px 48px;
   }
 
-  .columns-hero > div > div p:not(:has(picture)):not(:has(em)) {
-    position: absolute;
-    bottom: 80px;
-    left: 40px;
-    right: 40px;
-  }
-
-  .columns-hero > div > div:first-child p:nth-child(2) {
-    bottom: 140px;
-  }
-
-  .columns-hero > div > div:first-child p:nth-child(3) {
-    bottom: 60px;
-    font-size: 64px;
-  }
-
-  .columns-hero > div > div:last-child p:nth-child(2) {
-    bottom: 260px;
-  }
-
+  .columns-hero > div > div:first-child p:nth-child(3),
   .columns-hero > div > div:last-child p:nth-child(3) {
-    bottom: 180px;
-    font-size: 64px;
-  }
-
-  .columns-hero > div > div:last-child p:nth-child(4) {
-    bottom: 130px;
-  }
-
-  .columns-hero > div > div:last-child p:has(a) {
-    bottom: 80px;
+    font-size: 56px;
   }
 }

@@ -1,0 +1,39 @@
+{
+  "variantName": "columns-cta",
+  "baseBlock": "columns",
+  "version": "1.0.0",
+  "created": "2026-06-01T18:04:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://www.vyepti.com/",
+    "originPage": "homepage",
+    "blockPosition": "bottom"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "spacious",
+    "purpose": "cta-cards",
+    "imagePattern": "noimg"
+  },
+  "contentPattern": {
+    "structure": "eyebrow + heading + paragraph + primary button",
+    "buttonCount": 1,
+    "imageCount": 0
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "side-by-side CTA card sections",
+      "dual call-to-action layouts",
+      "bottom-of-page conversion areas"
+    ],
+    "notSuitableFor": [
+      "image-heavy side-by-side content",
+      "comparison layouts with data",
+      "layouts needing more than 2 columns"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/index"],
+    "reuseCount": 1,
+    "lastUsed": "2026-06-01T18:04:00.000Z"
+  }
+}

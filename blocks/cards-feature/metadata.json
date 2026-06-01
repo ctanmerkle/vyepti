@@ -1,0 +1,39 @@
+{
+  "variantName": "cards-feature",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-06-01T18:04:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://www.vyepti.com/",
+    "originPage": "homepage",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "spacious",
+    "purpose": "feature",
+    "imagePattern": "icon"
+  },
+  "contentPattern": {
+    "structure": "icon + heading + paragraph + CTA link",
+    "buttonCount": 1,
+    "imageCount": 1
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "feature highlight sections with icons",
+      "product benefit cards",
+      "service overview grids"
+    ],
+    "notSuitableFor": [
+      "cards with large photographs",
+      "blog article listing cards",
+      "team member profile cards"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/index"],
+    "reuseCount": 1,
+    "lastUsed": "2026-06-01T18:04:00.000Z"
+  }
+}

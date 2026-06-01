@@ -1,0 +1,133 @@
+{
+  "metadata": {
+    "projectType": "doc"
+  },
+  "templates": [
+    {
+      "name": "homepage",
+      "urls": ["https://www.vyepti.com/"],
+      "description": "Main landing page with hero, key messaging, and calls to action for VYEPTI migraine treatment",
+      "blocks": [
+        {
+          "name": "columns-hero",
+          "instances": ["#vyepti-banner-swap"]
+        },
+        {
+          "name": "cards-feature",
+          "instances": [".home-parsys"]
+        },
+        {
+          "name": "carousel-testimonial",
+          "instances": [".quotescardcarousel"]
+        },
+        {
+          "name": "columns-cta",
+          "instances": [".bgcardparsys"]
+        }
+      ],
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Hero Banner",
+          "selector": "#vyepti-banner-swap",
+          "style": null,
+          "blocks": ["columns-hero"],
+          "defaultContent": []
+        },
+        {
+          "id": "section-2",
+          "name": "Help CTA Strip",
+          "selector": ".vyepti-homepage-call-cta",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [".vyepti-homepage-call-cta .rteComponent p"]
+        },
+        {
+          "id": "section-3",
+          "name": "Feature Cards",
+          "selector": ".home-parsys",
+          "style": null,
+          "blocks": ["cards-feature"],
+          "defaultContent": []
+        },
+        {
+          "id": "section-4",
+          "name": "Patient Testimonials Carousel",
+          "selector": ".quotescardcarousel",
+          "style": "grey",
+          "blocks": ["carousel-testimonial"],
+          "defaultContent": []
+        },
+        {
+          "id": "section-5",
+          "name": "Bottom CTA Cards",
+          "selector": ".bgcardparsys",
+          "style": null,
+          "blocks": ["columns-cta"],
+          "defaultContent": []
+        },
+        {
+          "id": "section-6",
+          "name": "Important Safety Information",
+          "selector": ".cmp-experiencefragment--isi",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [".cmp-experiencefragment--isi .safetyInfo"]
+        }
+      ]
+    },
+    {
+      "name": "treatment-info",
+      "urls": [
+        "https://www.vyepti.com/vyepti-study-results",
+        "https://www.vyepti.com/vyepti-side-effects",
+        "https://www.vyepti.com/how-vyepti-works",
+        "https://www.vyepti.com/why-iv-treatment"
+      ],
+      "description": "Clinical and treatment information pages with study data, mechanism of action, and safety details",
+      "blocks": []
+    },
+    {
+      "name": "patient-journey",
+      "urls": [
+        "https://www.vyepti.com/what-to-expect",
+        "https://www.vyepti.com/could-vyepti-be-right-for-you",
+        "https://www.vyepti.com/real-life-impact",
+        "https://www.vyepti.com/real-patient-stories"
+      ],
+      "description": "Patient experience pages with treatment expectations, eligibility, and real patient testimonials",
+      "blocks": []
+    },
+    {
+      "name": "support-resources",
+      "urls": [
+        "https://www.vyepti.com/downloadable-resources",
+        "https://www.vyepti.com/nurse-support",
+        "https://www.vyepti.com/doctor-discussion-guide",
+        "https://www.vyepti.com/financial-assistance",
+        "https://www.vyepti.com/vyepti-insurance-coverage"
+      ],
+      "description": "Support and resource pages with downloadable materials, nurse support, financial assistance, and insurance info",
+      "blocks": []
+    },
+    {
+      "name": "engagement",
+      "urls": [
+        "https://www.vyepti.com/share-your-migraine-story",
+        "https://www.vyepti.com/stay-connected"
+      ],
+      "description": "Community engagement pages for sharing stories and staying connected",
+      "blocks": []
+    },
+    {
+      "name": "utility",
+      "urls": [
+        "https://www.vyepti.com/vyepti-locator",
+        "https://www.vyepti.com/vyepti-faq",
+        "https://www.vyepti.com/site-map"
+      ],
+      "description": "Utility pages including provider locator, FAQ, and site map",
+      "blocks": []
+    }
+  ]
+}

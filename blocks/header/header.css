@@ -166,7 +166,7 @@ header nav .nav-brand img {
 @media (width >= 900px) {
   header .nav-brand {
     order: 2;
-    padding: 10px 32px;
+    padding: 12px 32px;
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
@@ -179,8 +179,15 @@ header nav .nav-brand img {
     justify-content: space-between;
   }
 
+  header .nav-brand .default-content-wrapper p:first-child {
+    flex-shrink: 0;
+  }
+
   header .nav-brand .default-content-wrapper p:last-child {
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    font-size: 15px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -188,7 +195,20 @@ header nav .nav-brand img {
 
   header .nav-brand .default-content-wrapper p:last-child a {
     color: var(--brand-dark);
-    margin: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  header .nav-brand .default-content-wrapper p:last-child a::before {
+    content: '';
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--brand-teal);
+    background-color: transparent;
+    flex-shrink: 0;
   }
 
   header .nav-brand .default-content-wrapper p:last-child a:hover {

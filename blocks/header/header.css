@@ -214,6 +214,39 @@ header nav .nav-brand img {
   header .nav-brand .default-content-wrapper p:last-child a:hover {
     color: var(--brand-teal);
   }
+
+  /* search bar placeholder - last link styled as input */
+  header .nav-brand .default-content-wrapper p:last-child a:last-child {
+    border: 1px solid #999;
+    border-radius: 20px;
+    padding: 8px 40px 8px 16px;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #999;
+    position: relative;
+    min-width: 120px;
+  }
+
+  header .nav-brand .default-content-wrapper p:last-child a:last-child::before {
+    content: '';
+    display: none;
+  }
+
+  header .nav-brand .default-content-wrapper p:last-child a:last-child::after {
+    content: '\1F50D';
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+  }
+
+  header .nav-brand .default-content-wrapper p:last-child a:last-child:hover {
+    border-color: var(--brand-teal);
+    color: var(--brand-teal);
+  }
 }
 
 /* sections */

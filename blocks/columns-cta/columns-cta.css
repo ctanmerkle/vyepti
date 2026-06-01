@@ -1,33 +1,72 @@
 .columns-cta > div {
   display: flex;
   flex-direction: column;
-}
-
-.columns-cta img {
-  width: 100%;
+  gap: 24px;
+  padding: 40px 0;
 }
 
 .columns-cta > div > div {
-  order: 1;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: var(--brand-shadow);
+  padding: 32px;
+  text-align: left;
 }
 
-.columns-cta > div > .columns-cta-img-col {
-  order: 0;
+.columns-cta > div > div h4 {
+  color: var(--brand-teal);
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px;
 }
 
-.columns-cta > div > .columns-cta-img-col img {
-  display: block;
+.columns-cta > div > div h2 {
+  color: var(--brand-red);
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.columns-cta > div > div p {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-color);
+  margin: 0 0 20px;
+}
+
+.columns-cta > div > div p:has(a) {
+  margin: 0;
+}
+
+.columns-cta > div > div a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--brand-teal);
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.columns-cta > div > div a:hover {
+  background-color: var(--link-hover-color);
+  text-decoration: none;
 }
 
 @media (width >= 900px) {
   .columns-cta > div {
-    align-items: center;
-    flex-direction: unset;
-    gap: 24px;
+    flex-direction: row;
+    gap: 32px;
   }
 
   .columns-cta > div > div {
     flex: 1;
-    order: unset;
+    padding: 40px;
   }
 }

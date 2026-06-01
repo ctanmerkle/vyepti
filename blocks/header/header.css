@@ -4,7 +4,7 @@ header .nav-wrapper {
   width: 100%;
   z-index: 2;
   position: fixed;
-  box-shadow: 0 2px 4px rgb(0 0 0 / 8%);
+  border-bottom: 1px solid #e0e0e0;
 }
 
 header nav {
@@ -39,7 +39,7 @@ header nav[aria-expanded='true'] {
   header nav {
     display: flex;
     justify-content: space-between;
-    gap: 0 32px;
+    gap: 0 24px;
     max-width: 1264px;
     padding: 0 32px;
   }
@@ -56,7 +56,7 @@ header nav p {
 }
 
 header nav a:any-link {
-  color: currentcolor;
+  color: var(--brand-dark);
   text-decoration: none;
 }
 
@@ -156,7 +156,7 @@ header .nav-brand {
 }
 
 header nav .nav-brand img {
-  width: 160px;
+  width: 128px;
   height: auto;
 }
 
@@ -192,6 +192,8 @@ header nav .nav-sections ul > li > ul {
 header nav .nav-sections ul > li > ul > li {
   font-weight: 400;
 }
+
+/* stylelint-disable no-descending-specificity */
 
 @media (width >= 900px) {
   header nav .nav-sections {
@@ -232,7 +234,7 @@ header nav .nav-sections ul > li > ul > li {
 
   header nav .nav-sections ul {
     display: flex;
-    gap: 28px;
+    gap: 24px;
     margin: 0;
     align-items: center;
   }
@@ -240,7 +242,7 @@ header nav .nav-sections ul > li > ul > li {
   header nav .nav-sections .default-content-wrapper > ul > li {
     flex: 0 1 auto;
     position: relative;
-    padding: 8px 0;
+    padding: 10px 0;
     border-bottom: 3px solid transparent;
     transition: border-color 0.2s;
   }
@@ -262,7 +264,7 @@ header nav .nav-sections ul > li > ul > li {
     display: block;
     position: absolute;
     left: -24px;
-    width: 220px;
+    width: 240px;
     top: 150%;
     padding: 16px 20px;
     background-color: #fff;
@@ -283,7 +285,6 @@ header nav .nav-sections ul > li > ul > li {
     border-bottom: 8px solid #fff;
   }
 
-  /* stylelint-disable-next-line no-descending-specificity */
   header nav .nav-sections .default-content-wrapper > ul > li > ul > li {
     padding: 8px 0;
   }
@@ -291,12 +292,15 @@ header nav .nav-sections ul > li > ul > li {
   header nav .nav-sections .default-content-wrapper > ul > li > ul > li a {
     color: var(--text-color);
     font-size: 14px;
+    font-weight: 400;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul > li a:hover {
     color: var(--brand-teal);
   }
 }
+
+/* stylelint-enable no-descending-specificity */
 
 /* tools */
 header nav .nav-tools {

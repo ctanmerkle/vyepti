@@ -159,6 +159,8 @@ header .nav-brand {
 header nav .nav-brand img {
   width: 128px;
   height: auto;
+  max-height: 60px;
+  object-fit: contain;
 }
 
 @media (width >= 900px) {

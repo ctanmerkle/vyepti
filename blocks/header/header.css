@@ -4,7 +4,6 @@ header .nav-wrapper {
   width: 100%;
   z-index: 2;
   position: fixed;
-  border-bottom: 1px solid #e0e0e0;
 }
 
 header nav {
@@ -26,7 +25,7 @@ header nav[aria-expanded='true'] {
   grid-template:
     'hamburger brand' var(--nav-height)
     'sections sections' 1fr
-    'tools tools' var(--nav-height) / auto 1fr;
+    'tools tools' auto / auto 1fr;
   overflow-y: auto;
   min-height: 100dvh;
 }
@@ -37,11 +36,14 @@ header nav[aria-expanded='true'] {
   }
 
   header nav {
-    display: flex;
-    justify-content: space-between;
-    gap: 0 24px;
-    max-width: 1264px;
-    padding: 0 32px;
+    display: grid;
+    grid-template:
+      'tools tools tools' auto
+      'brand sections sections' auto / auto 1fr auto;
+    gap: 0;
+    max-width: 100%;
+    padding: 0;
+    height: auto;
   }
 
   header nav[aria-expanded='true'] {
@@ -160,6 +162,13 @@ header nav .nav-brand img {
   height: auto;
 }
 
+@media (width >= 900px) {
+  header .nav-brand {
+    padding: 12px 32px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+}
+
 /* sections */
 header nav .nav-sections {
   grid-area: sections;
@@ -200,6 +209,8 @@ header nav .nav-sections ul > li > ul > li {
     display: block;
     visibility: visible;
     white-space: nowrap;
+    padding: 0 32px;
+    border-bottom: 1px solid #e0e0e0;
   }
 
   header nav[aria-expanded='true'] .nav-sections {
@@ -234,7 +245,7 @@ header nav .nav-sections ul > li > ul > li {
 
   header nav .nav-sections ul {
     display: flex;
-    gap: 24px;
+    gap: 28px;
     margin: 0;
     align-items: center;
   }
@@ -242,7 +253,7 @@ header nav .nav-sections ul > li > ul > li {
   header nav .nav-sections .default-content-wrapper > ul > li {
     flex: 0 1 auto;
     position: relative;
-    padding: 10px 0;
+    padding: 12px 0;
     border-bottom: 3px solid transparent;
     transition: border-color 0.2s;
   }
@@ -302,7 +313,44 @@ header nav .nav-sections ul > li > ul > li {
 
 /* stylelint-enable no-descending-specificity */
 
-/* tools */
+/* tools - teal utility bar */
 header nav .nav-tools {
   grid-area: tools;
+  display: none;
+}
+
+@media (width >= 900px) {
+  header nav .nav-tools {
+    display: block;
+    background-color: var(--brand-teal);
+    padding: 10px 32px;
+    width: 100%;
+  }
+
+  header nav .nav-tools .default-content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  header nav .nav-tools p {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 400;
+    margin: 0;
+  }
+
+  header nav .nav-tools a {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 400;
+  }
+
+  header nav .nav-tools a:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
 }

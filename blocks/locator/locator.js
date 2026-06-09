@@ -1,8 +1,22 @@
 /* global google */
 import { loadScript } from '../../scripts/aem.js';
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyC9EwXy0QjV2u1LR0PrKNNR_lMJHr4dTGI';
-const COVERAGE_API = 'https://coveragefinderapi.mmitnetwork.com/coverage';
+const DEFAULT_GOOGLE_MAPS_API_KEY = 'AIzaSyC9EwXy0QjV2u1LR0PrKNNR_lMJHr4dTGI';
+const DEFAULT_COVERAGE_API = 'https://coveragefinderapi.mmitnetwork.com/coverage';
+
+function readConfig(block) {
+  const rows = block.querySelectorAll(':scope > div');
+  const config = {};
+  rows.forEach((row) => {
+    const cells = row.querySelectorAll(':scope > div');
+    if (cells.length >= 2) {
+      const key = cells[0].textContent.trim().toLowerCase().replace(/\s+/g, '-');
+      const value = cells[1].textContent.trim();
+      if (key && value) config[key] = value;
+    }
+  });
+  return config;
+}
 
 let map;
 let markers = [];
@@ -115,7 +129,7 @@ async function geocodeZip(zip) {
   });
 }
 
-async function searchLocations(zip, distance) {
+async function searchLocations(zip, distance, apiUrl) {
   const coords = await geocodeZip(zip);
   map.setCenter(coords);
   map.setZoom(10);
@@ -127,7 +141,7 @@ async function searchLocations(zip, distance) {
       radius: distance,
     });
 
-    const response = await fetch(`${COVERAGE_API}?${params}`);
+    const response = await fetch(`${apiUrl}?${params}`);
     if (response.ok) {
       const data = await response.json();
       return data.results || data.providers || data || [];
@@ -141,6 +155,10 @@ async function searchLocations(zip, distance) {
 }
 
 export default async function decorate(block) {
+  const config = readConfig(block);
+  const apiKey = config['google-maps-api-key'] || DEFAULT_GOOGLE_MAPS_API_KEY;
+  const coverageApi = config['api-endpoint'] || DEFAULT_COVERAGE_API;
+
   block.textContent = '';
 
   const searchForm = createSearchForm();
@@ -149,7 +167,7 @@ export default async function decorate(block) {
   block.append(searchForm);
   block.append(mapContainer);
 
-  await loadScript(`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`);
+  await loadScript(`https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`);
 
   map = new google.maps.Map(document.getElementById('locator-map'), {
     center: { lat: 37.09, lng: -95.71 },
@@ -172,7 +190,7 @@ export default async function decorate(block) {
     clearMarkers();
 
     try {
-      const results = await searchLocations(zip, distanceSelect.value);
+      const results = await searchLocations(zip, distanceSelect.value, coverageApi);
       renderResults(results, resultsContainer);
     } catch (e) {
       resultsContainer.innerHTML = '<p class="locator-error">Unable to search. Please check your input and try again.</p>';

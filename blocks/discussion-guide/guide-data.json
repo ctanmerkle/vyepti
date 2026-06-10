@@ -1,0 +1,129 @@
+{
+  "steps": [
+    {
+      "id": 1,
+      "title": "Start your Doctor Discussion Guide",
+      "question": "What types of activities or events are impacted by migraine?",
+      "helpText": "Select all that apply. This might include events or activities you miss because of migraine or times that you participate but don't feel like yourself.",
+      "type": "checkbox",
+      "hasNameField": true,
+      "options": [
+        "Social events with friends/family",
+        "Work/school",
+        "Daily life/household activities",
+        "Exercise or being active",
+        "I can't make plans"
+      ],
+      "hasNoneOption": true
+    },
+    {
+      "id": 2,
+      "title": "How does living with migraine make you feel?",
+      "question": "How does living with migraine make you feel?",
+      "helpText": "Select all that apply",
+      "type": "checkbox",
+      "options": [
+        "Defeated",
+        "Frustrated",
+        "On edge",
+        "Stuck",
+        "Desperate",
+        "Isolated",
+        "Not my best"
+      ],
+      "hasNoneOption": true
+    },
+    {
+      "id": 3,
+      "title": "How many days a month are \"crystal clear\" and not impacted by migraine in any way?",
+      "question": "How many days a month are \"crystal clear\" and not impacted by migraine in any way?",
+      "helpText": "",
+      "type": "radio",
+      "options": [
+        "0–5 days a month",
+        "6–10 days a month",
+        "11–15 days a month",
+        "16–20 days a month",
+        "21+ days a month"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "In the last 3 months, have you been having more migraine attacks?",
+      "question": "In the last 3 months, have you been having more migraine attacks?",
+      "helpText": "",
+      "type": "radio",
+      "options": [
+        "Yes",
+        "No",
+        "Not sure"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "In the last 3 months, have you been taking more medication to stop migraine attacks?",
+      "question": "In the last 3 months, have you been taking more medication to stop migraine attacks?",
+      "helpText": "",
+      "type": "radio",
+      "options": [
+        "Yes",
+        "No",
+        "Not sure"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "In the last 3 months, how have you tried to address migraine?",
+      "question": "In the last 3 months, how have you tried to address migraine?",
+      "helpText": "Select all that apply",
+      "type": "checkbox",
+      "options": [
+        "Over-the-counter relief medication",
+        "Prescription relief medication",
+        "Preventive treatment medication",
+        "Medical devices",
+        "Changes in lifestyle, diet, or exercise"
+      ],
+      "hasNoneOption": true
+    },
+    {
+      "id": 7,
+      "title": "Are you satisfied with your current preventive treatment?",
+      "question": "Are you satisfied with your current preventive treatment?",
+      "helpText": "",
+      "type": "radio",
+      "options": [
+        "Yes",
+        "No",
+        "Not sure",
+        "Not currently on a preventive treatment"
+      ]
+    },
+    {
+      "id": 8,
+      "title": "What are you hoping to find in a preventive migraine treatment?",
+      "question": "What are you hoping to find in a preventive migraine treatment?",
+      "helpText": "Select all that apply",
+      "type": "checkbox",
+      "options": [
+        "Gives me more migraine-free days",
+        "Works fast and lasts between scheduled doses",
+        "Reduces the use of rescue medications",
+        "Provides results with fewer doses"
+      ],
+      "hasNoneOption": true
+    },
+    {
+      "id": 9,
+      "title": "Are you open to trying an IV infusion treatment given 4x/year to help prevent migraine attacks?",
+      "question": "Are you open to trying an IV infusion treatment given 4x/year to help prevent migraine attacks?",
+      "helpText": "",
+      "type": "radio",
+      "options": [
+        "Yes",
+        "No",
+        "Not sure"
+      ]
+    }
+  ]
+}

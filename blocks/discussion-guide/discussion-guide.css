@@ -1,0 +1,308 @@
+.discussion-guide-wrapper {
+  padding: 40px 0;
+}
+
+.discussion-guide {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.discussion-guide .ddg-wrapper {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: var(--brand-shadow);
+  padding: 32px;
+}
+
+/* progress dots */
+.discussion-guide .ddg-progress {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.discussion-guide .ddg-progress-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.discussion-guide .ddg-progress-dot.active {
+  border-color: var(--brand-teal);
+  background-color: var(--brand-teal);
+  transform: scale(1.2);
+}
+
+.discussion-guide .ddg-progress-dot.completed {
+  border-color: var(--brand-teal);
+  background-color: var(--brand-teal);
+}
+
+.discussion-guide .ddg-progress-dot:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* step content */
+.discussion-guide .ddg-step-counter {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.discussion-guide .ddg-step-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0 0 16px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.discussion-guide .ddg-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--brand-teal);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.discussion-guide .ddg-question {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0 0 8px;
+}
+
+.discussion-guide .ddg-help-text {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 20px;
+}
+
+/* name field */
+.discussion-guide .ddg-name-field {
+  margin-bottom: 24px;
+}
+
+.discussion-guide .ddg-name-field label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 6px;
+}
+
+.discussion-guide .ddg-optional {
+  font-weight: 400;
+  color: #666;
+  margin-left: 8px;
+  font-size: 12px;
+}
+
+.discussion-guide .ddg-name-field input {
+  padding: 12px 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
+}
+
+.discussion-guide .ddg-name-field input:focus {
+  outline: none;
+  border-color: var(--brand-teal);
+}
+
+/* options */
+.discussion-guide .ddg-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.discussion-guide .ddg-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.discussion-guide .ddg-option:hover {
+  border-color: var(--brand-teal);
+  background-color: #f8fcfd;
+}
+
+.discussion-guide .ddg-option:has(input:checked) {
+  border-color: var(--brand-teal);
+  background-color: #eef7fa;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.discussion-guide .ddg-option input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--brand-teal);
+  flex-shrink: 0;
+}
+
+.discussion-guide .ddg-option-indicator {
+  display: none;
+}
+
+.discussion-guide .ddg-option-text {
+  font-size: 16px;
+  color: var(--text-color);
+}
+
+.discussion-guide .ddg-option-none {
+  border-style: dashed;
+}
+
+/* navigation buttons */
+.discussion-guide .ddg-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.discussion-guide .ddg-btn-next,
+.discussion-guide .ddg-btn-finish {
+  background-color: var(--brand-teal);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 40px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-left: auto;
+}
+
+.discussion-guide .ddg-btn-next:hover,
+.discussion-guide .ddg-btn-finish:hover {
+  background-color: var(--link-hover-color);
+}
+
+.discussion-guide .ddg-btn-back {
+  background: none;
+  border: 2px solid var(--brand-teal);
+  border-radius: 30px;
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--brand-teal);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.discussion-guide .ddg-btn-back:hover {
+  background-color: var(--brand-teal);
+  color: #fff;
+}
+
+/* loading state */
+.discussion-guide .ddg-loading {
+  text-align: center;
+  padding: 60px 24px;
+}
+
+.discussion-guide .ddg-loading p {
+  font-size: 18px;
+  color: var(--brand-teal);
+}
+
+/* success state */
+.discussion-guide .ddg-success {
+  text-align: center;
+  padding: 40px 24px;
+}
+
+.discussion-guide .ddg-success h2 {
+  color: var(--brand-teal);
+  font-size: 24px;
+  margin: 0 0 12px;
+}
+
+.discussion-guide .ddg-success p {
+  font-size: 16px;
+  color: var(--text-color);
+  margin: 0 0 24px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.discussion-guide .ddg-btn-restart {
+  background: none;
+  border: 2px solid var(--brand-teal);
+  border-radius: 30px;
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--brand-teal);
+  cursor: pointer;
+  margin: 0 8px;
+}
+
+.discussion-guide .ddg-btn-download {
+  background-color: var(--brand-teal);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0 8px;
+}
+
+.discussion-guide .ddg-btn-restart:hover {
+  background-color: var(--brand-teal);
+  color: #fff;
+}
+
+.discussion-guide .ddg-btn-download:hover {
+  background-color: var(--link-hover-color);
+}
+
+@media (width >= 600px) {
+  .discussion-guide .ddg-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .discussion-guide .ddg-option-none {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (width >= 900px) {
+  .discussion-guide .ddg-wrapper {
+    padding: 48px;
+  }
+}

@@ -1,14 +1,27 @@
-import { loadScript } from '../../scripts/aem.js';
-
-const JSPDF_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+const DEFAULT_API_ENDPOINT = 'https://www.vyepti.com/api/doctordiscussionguide';
 let guideData = null;
-let answers = {};
+const answers = {};
 let currentStep = 0;
 let userName = '';
+let apiEndpoint = DEFAULT_API_ENDPOINT;
 
 async function loadGuideData() {
   const resp = await fetch(`${window.hlx?.codeBasePath || ''}/blocks/discussion-guide/guide-data.json`);
   guideData = await resp.json();
+}
+
+function readConfig(block) {
+  const rows = block.querySelectorAll(':scope > div');
+  const config = {};
+  rows.forEach((row) => {
+    const cells = row.querySelectorAll(':scope > div');
+    if (cells.length >= 2) {
+      const key = cells[0].textContent.trim().toLowerCase().replace(/\s+/g, '-');
+      const value = cells[1].textContent.trim();
+      if (key && value) config[key] = value;
+    }
+  });
+  return config;
 }
 
 function collectAnswers(block) {
@@ -16,113 +29,99 @@ function collectAnswers(block) {
   answers[currentStep] = Array.from(checked).map((input) => input.value);
 }
 
-async function generatePDF(block) {
-  const content = block.querySelector('.ddg-content');
-  content.innerHTML = '<div class="ddg-loading"><p>Generating your discussion guide...</p></div>';
+/**
+ * Builds form data matching the original backend's expected field names.
+ * Checkboxes use per-option field names (q1a1, q1a2...).
+ * Radios share one field name per question (q3a1).
+ */
+function buildFormData() {
+  const formData = new URLSearchParams();
+  formData.append('fname', userName);
 
-  await loadScript(JSPDF_CDN);
-  const { jsPDF: JsPDF } = window.jspdf;
-  const doc = new JsPDF();
+  guideData.steps.forEach((step, stepIndex) => {
+    const stepAnswers = answers[stepIndex] || [];
 
-  const margin = 20;
-  let y = margin;
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const contentWidth = pageWidth - (margin * 2);
-
-  doc.setFontSize(22);
-  doc.setTextColor(4, 97, 131);
-  doc.text('My Doctor Discussion Guide', margin, y);
-  y += 12;
-
-  if (userName) {
-    doc.setFontSize(14);
-    doc.setTextColor(51, 51, 51);
-    doc.text(`Prepared for: ${userName}`, margin, y);
-    y += 10;
-  }
-
-  doc.setFontSize(10);
-  doc.setTextColor(102, 102, 102);
-  doc.text(`Generated: ${new Date().toLocaleDateString()}`, margin, y);
-  y += 12;
-
-  doc.setDrawColor(4, 97, 131);
-  doc.setLineWidth(0.5);
-  doc.line(margin, y, pageWidth - margin, y);
-  y += 10;
-
-  guideData.steps.forEach((step, i) => {
-    if (y > 260) {
-      doc.addPage();
-      y = margin;
-    }
-
-    doc.setFontSize(12);
-    doc.setTextColor(4, 97, 131);
-    doc.setFont(undefined, 'bold');
-    const titleLines = doc.splitTextToSize(`${i + 1}. ${step.title}`, contentWidth);
-    doc.text(titleLines, margin, y);
-    y += titleLines.length * 6 + 2;
-
-    const stepAnswers = answers[i] || [];
-    doc.setFontSize(11);
-    doc.setFont(undefined, 'normal');
-
-    if (stepAnswers.length > 0) {
-      doc.setTextColor(51, 51, 51);
-      stepAnswers.forEach((answer) => {
-        if (y > 270) {
-          doc.addPage();
-          y = margin;
-        }
-        doc.text(`• ${answer}`, margin + 4, y);
-        y += 6;
-      });
+    if (step.type === 'radio') {
+      const selected = stepAnswers[0];
+      if (selected) formData.append(step.radioField, selected);
     } else {
-      doc.setTextColor(153, 153, 153);
-      doc.text('(No answer selected)', margin + 4, y);
-      y += 6;
+      step.options.forEach((option) => {
+        if (stepAnswers.includes(option.label)) {
+          formData.append(option.field, option.label);
+        }
+      });
+      if (step.noneField && stepAnswers.includes('None of the above')) {
+        formData.append(step.noneField, 'None of the above');
+      }
+    }
+  });
+
+  return formData;
+}
+
+function showError(content) {
+  const errorEl = content.querySelector('.ddg-error-message');
+  if (errorEl) errorEl.classList.remove('d-none');
+}
+
+function openPdfBlob(blob) {
+  const fileURL = URL.createObjectURL(blob);
+  // Safari needs a deferred window.open to avoid popup blocking
+  if (navigator.userAgent.match(/Version\/[\d.]+.*Safari/)) {
+    setTimeout(() => {
+      const newWin = window.open(fileURL);
+      if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
+        const blocker = document.querySelector('.ddg-popup-blocker');
+        if (blocker) blocker.classList.remove('d-none');
+      }
+    }, 1000);
+  } else {
+    window.open(fileURL);
+  }
+}
+
+async function submitGuide(block) {
+  collectAnswers(block);
+  const content = block.querySelector('.ddg-content');
+  const finishBtn = content.querySelector('.ddg-btn-finish');
+  if (finishBtn) {
+    finishBtn.textContent = 'Generating...';
+    finishBtn.disabled = true;
+  }
+
+  const errorEl = content.querySelector('.ddg-error-message');
+  if (errorEl) errorEl.classList.add('d-none');
+
+  try {
+    const response = await fetch(apiEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: buildFormData().toString(),
+    });
+
+    if (!response.ok) {
+      showError(content);
+      if (finishBtn) {
+        finishBtn.textContent = 'Generate My Guide';
+        finishBtn.disabled = false;
+      }
+      return;
     }
 
-    y += 8;
-  });
+    const blob = await response.blob();
+    openPdfBlob(blob);
 
-  if (y > 240) {
-    doc.addPage();
-    y = margin;
+    if (finishBtn) {
+      finishBtn.textContent = 'Generate My Guide';
+      finishBtn.disabled = false;
+    }
+  } catch (e) {
+    showError(content);
+    if (finishBtn) {
+      finishBtn.textContent = 'Generate My Guide';
+      finishBtn.disabled = false;
+    }
   }
-  y += 10;
-  doc.setDrawColor(4, 97, 131);
-  doc.line(margin, y, pageWidth - margin, y);
-  y += 8;
-  doc.setFontSize(9);
-  doc.setTextColor(102, 102, 102);
-  doc.setFont(undefined, 'normal');
-  const footer = doc.splitTextToSize(
-    'This guide is for informational purposes only and is not a substitute for professional medical advice. Please discuss your responses with your healthcare provider.',
-    contentWidth,
-  );
-  doc.text(footer, margin, y);
-
-  doc.save('VYEPTI-Doctor-Discussion-Guide.pdf');
-
-  content.innerHTML = `<div class="ddg-success">
-    <h2>Your guide has been downloaded!</h2>
-    <p>Bring this guide to your next doctor's appointment to help start a conversation about whether VYEPTI could be right for you.</p>
-    <button class="ddg-btn-restart">Start Over</button>
-    <button class="ddg-btn-download">Download Again</button>
-  </div>`;
-
-  content.querySelector('.ddg-btn-restart').addEventListener('click', () => {
-    answers = {};
-    userName = '';
-    currentStep = 0;
-    renderStep(block); // eslint-disable-line no-use-before-define
-  });
-
-  content.querySelector('.ddg-btn-download').addEventListener('click', () => {
-    doc.save('VYEPTI-Doctor-Discussion-Guide.pdf');
-  });
 }
 
 function attachStepListeners(block) {
@@ -174,9 +173,8 @@ function attachStepListeners(block) {
 
   const finishBtn = block.querySelector('.ddg-btn-finish');
   if (finishBtn) {
-    finishBtn.addEventListener('click', async () => {
-      collectAnswers(block);
-      await generatePDF(block);
+    finishBtn.addEventListener('click', () => {
+      submitGuide(block);
     });
   }
 }
@@ -194,8 +192,7 @@ function renderProgress(block) {
     dot.addEventListener('click', () => {
       if (i <= currentStep) {
         currentStep = i;
-        // eslint-disable-next-line no-use-before-define
-        renderStep(block);
+        renderStep(block); // eslint-disable-line no-use-before-define
       }
     });
     progress.append(dot);
@@ -228,25 +225,25 @@ function renderStep(block) {
 
   step.options.forEach((option, i) => {
     const inputType = step.type === 'checkbox' ? 'checkbox' : 'radio';
-    const checked = stepAnswers.includes(option) ? 'checked' : '';
+    const checked = stepAnswers.includes(option.label) ? 'checked' : '';
     const inputName = step.type === 'radio' ? `step-${currentStep}` : `step-${currentStep}-${i}`;
     html += `<label class="ddg-option">
-      <input type="${inputType}" name="${inputName}" value="${option}" ${checked}>
-      <span class="ddg-option-indicator"></span>
-      <span class="ddg-option-text">${option}</span>
+      <input type="${inputType}" name="${inputName}" value="${option.label}" ${checked}>
+      <span class="ddg-option-text">${option.label}</span>
     </label>`;
   });
 
-  if (step.hasNoneOption) {
+  if (step.noneField) {
     const checked = stepAnswers.includes('None of the above') ? 'checked' : '';
     html += `<label class="ddg-option ddg-option-none">
       <input type="radio" name="step-${currentStep}-none" value="None of the above" ${checked}>
-      <span class="ddg-option-indicator"></span>
       <span class="ddg-option-text">None of the above</span>
     </label>`;
   }
 
   html += '</div>';
+
+  html += '<p class="ddg-error-message d-none">An error occurred. Please refresh your page and try again later.</p>';
 
   html += '<div class="ddg-nav">';
   if (currentStep > 0) {
@@ -265,6 +262,9 @@ function renderStep(block) {
 }
 
 export default async function decorate(block) {
+  const config = readConfig(block);
+  apiEndpoint = config['api-endpoint'] || DEFAULT_API_ENDPOINT;
+
   block.textContent = '';
 
   await loadGuideData();
@@ -274,6 +274,9 @@ export default async function decorate(block) {
   wrapper.innerHTML = `
     <div class="ddg-progress"></div>
     <div class="ddg-content"></div>
+    <div class="ddg-popup-blocker d-none">
+      <p>Your guide opened in a new tab. If you don't see it, please disable your popup blocker and try again.</p>
+    </div>
   `;
   block.append(wrapper);
 

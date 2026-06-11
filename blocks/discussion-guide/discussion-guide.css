@@ -166,10 +166,6 @@
   flex-shrink: 0;
 }
 
-.discussion-guide .ddg-option-indicator {
-  display: none;
-}
-
 .discussion-guide .ddg-option-text {
   font-size: 16px;
   color: var(--text-color);
@@ -225,69 +221,30 @@
   color: #fff;
 }
 
-/* loading state */
-.discussion-guide .ddg-loading {
-  text-align: center;
-  padding: 60px 24px;
+/* error message */
+.discussion-guide .ddg-error-message {
+  color: var(--brand-red);
+  font-size: 14px;
+  margin: 16px 0 0;
 }
 
-.discussion-guide .ddg-loading p {
-  font-size: 18px;
-  color: var(--brand-teal);
+.discussion-guide .d-none {
+  display: none;
 }
 
-/* success state */
-.discussion-guide .ddg-success {
-  text-align: center;
-  padding: 40px 24px;
+/* popup blocker notice */
+.discussion-guide .ddg-popup-blocker {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: #fef6e6;
+  border: 1px solid #f0c36d;
+  border-radius: 4px;
 }
 
-.discussion-guide .ddg-success h2 {
-  color: var(--brand-teal);
-  font-size: 24px;
-  margin: 0 0 12px;
-}
-
-.discussion-guide .ddg-success p {
-  font-size: 16px;
+.discussion-guide .ddg-popup-blocker p {
+  margin: 0;
+  font-size: 14px;
   color: var(--text-color);
-  margin: 0 0 24px;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.discussion-guide .ddg-btn-restart {
-  background: none;
-  border: 2px solid var(--brand-teal);
-  border-radius: 30px;
-  padding: 12px 32px;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--brand-teal);
-  cursor: pointer;
-  margin: 0 8px;
-}
-
-.discussion-guide .ddg-btn-download {
-  background-color: var(--brand-teal);
-  color: #fff;
-  border: none;
-  border-radius: 30px;
-  padding: 14px 32px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  margin: 0 8px;
-}
-
-.discussion-guide .ddg-btn-restart:hover {
-  background-color: var(--brand-teal);
-  color: #fff;
-}
-
-.discussion-guide .ddg-btn-download:hover {
-  background-color: var(--link-hover-color);
 }
 
 @media (width >= 600px) {

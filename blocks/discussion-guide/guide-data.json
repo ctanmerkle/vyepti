@@ -8,13 +8,13 @@
       "type": "checkbox",
       "hasNameField": true,
       "options": [
-        "Social events with friends/family",
-        "Work/school",
-        "Daily life/household activities",
-        "Exercise or being active",
-        "I can't make plans"
+        { "field": "q1a1", "label": "Social events with friends/family" },
+        { "field": "q1a2", "label": "Work/school" },
+        { "field": "q1a3", "label": "Daily life/household activities" },
+        { "field": "q1a4", "label": "Exercise or being active" },
+        { "field": "q1a5", "label": "I can't make plans" }
       ],
-      "hasNoneOption": true
+      "noneField": "q1a6"
     },
     {
       "id": 2,
@@ -23,15 +23,15 @@
       "helpText": "Select all that apply",
       "type": "checkbox",
       "options": [
-        "Defeated",
-        "Frustrated",
-        "On edge",
-        "Stuck",
-        "Desperate",
-        "Isolated",
-        "Not my best"
+        { "field": "q2a1", "label": "Defeated" },
+        { "field": "q2a2", "label": "Frustrated" },
+        { "field": "q2a3", "label": "On edge" },
+        { "field": "q2a4", "label": "Stuck" },
+        { "field": "q2a5", "label": "Desperate" },
+        { "field": "q2a6", "label": "Isolated" },
+        { "field": "q2a7", "label": "Not my best" }
       ],
-      "hasNoneOption": true
+      "noneField": "q2a8"
     },
     {
       "id": 3,
@@ -39,12 +39,13 @@
       "question": "How many days a month are \"crystal clear\" and not impacted by migraine in any way?",
       "helpText": "",
       "type": "radio",
+      "radioField": "q3a1",
       "options": [
-        "0–5 days a month",
-        "6–10 days a month",
-        "11–15 days a month",
-        "16–20 days a month",
-        "21+ days a month"
+        { "label": "0–5 days a month" },
+        { "label": "6–10 days a month" },
+        { "label": "11–15 days a month" },
+        { "label": "16–20 days a month" },
+        { "label": "21+ days a month" }
       ]
     },
     {
@@ -53,10 +54,11 @@
       "question": "In the last 3 months, have you been having more migraine attacks?",
       "helpText": "",
       "type": "radio",
+      "radioField": "q4a1",
       "options": [
-        "Yes",
-        "No",
-        "Not sure"
+        { "label": "Yes" },
+        { "label": "No" },
+        { "label": "Not sure" }
       ]
     },
     {
@@ -65,10 +67,11 @@
       "question": "In the last 3 months, have you been taking more medication to stop migraine attacks?",
       "helpText": "",
       "type": "radio",
+      "radioField": "q5a1",
       "options": [
-        "Yes",
-        "No",
-        "Not sure"
+        { "label": "Yes" },
+        { "label": "No" },
+        { "label": "Not sure" }
       ]
     },
     {
@@ -78,13 +81,13 @@
       "helpText": "Select all that apply",
       "type": "checkbox",
       "options": [
-        "Over-the-counter relief medication",
-        "Prescription relief medication",
-        "Preventive treatment medication",
-        "Medical devices",
-        "Changes in lifestyle, diet, or exercise"
+        { "field": "q6a1", "label": "Over-the-counter relief medication" },
+        { "field": "q6a2", "label": "Prescription relief medication" },
+        { "field": "q6a3", "label": "Preventive treatment medication" },
+        { "field": "q6a4", "label": "Medical devices" },
+        { "field": "q6a5", "label": "Changes in lifestyle, diet, or exercise" }
       ],
-      "hasNoneOption": true
+      "noneField": "q6a6"
     },
     {
       "id": 7,
@@ -92,11 +95,12 @@
       "question": "Are you satisfied with your current preventive treatment?",
       "helpText": "",
       "type": "radio",
+      "radioField": "q7a1",
       "options": [
-        "Yes",
-        "No",
-        "Not sure",
-        "Not currently on a preventive treatment"
+        { "label": "Yes" },
+        { "label": "No" },
+        { "label": "Not sure" },
+        { "label": "Not currently on a preventive treatment" }
       ]
     },
     {
@@ -106,12 +110,12 @@
       "helpText": "Select all that apply",
       "type": "checkbox",
       "options": [
-        "Gives me more migraine-free days",
-        "Works fast and lasts between scheduled doses",
-        "Reduces the use of rescue medications",
-        "Provides results with fewer doses"
+        { "field": "q8a1", "label": "Gives me more migraine-free days" },
+        { "field": "q8a2", "label": "Works fast and lasts between scheduled doses" },
+        { "field": "q8a3", "label": "Reduces the use of rescue medications" },
+        { "field": "q8a4", "label": "Provides results with fewer doses" }
       ],
-      "hasNoneOption": true
+      "noneField": "q8a5"
     },
     {
       "id": 9,
@@ -119,10 +123,11 @@
       "question": "Are you open to trying an IV infusion treatment given 4x/year to help prevent migraine attacks?",
       "helpText": "",
       "type": "radio",
+      "radioField": "q9a1",
       "options": [
-        "Yes",
-        "No",
-        "Not sure"
+        { "label": "Yes" },
+        { "label": "No" },
+        { "label": "Not sure" }
       ]
     }
   ]

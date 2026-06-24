@@ -90,6 +90,55 @@
   margin: 12px 0 0;
 }
 
+/* facility-type filters (HCP variant) */
+.locator .locator-filters {
+  border: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  align-items: center;
+}
+
+.locator .locator-filters legend {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-color);
+  padding: 0;
+  margin-right: 8px;
+}
+
+.locator .locator-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.locator .locator-filter input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--brand-teal);
+}
+
+/* network badge (HCP variant) */
+.locator .locator-network-badge {
+  display: inline-block;
+  background-color: var(--brand-teal);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin: 4px 0;
+}
+
 /* map and results */
 .locator .locator-map-results {
   display: flex;

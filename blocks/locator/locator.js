@@ -2,7 +2,17 @@
 import { loadScript } from '../../scripts/aem.js';
 
 const DEFAULT_GOOGLE_MAPS_API_KEY = 'AIzaSyC9EwXy0QjV2u1LR0PrKNNR_lMJHr4dTGI';
-const DEFAULT_COVERAGE_API = 'https://coveragefinderapi.mmitnetwork.com/coverage';
+const DEFAULT_API_ENDPOINT = 'https://www.vyepti.com/api/picllocator';
+
+const DEFAULT_DISTANCES = ['25', '50', '75', '100'];
+const FACILITY_TYPES = [
+  { key: 'infusionNetwork', label: 'VYEPTI Infusion Network' },
+  { key: 'nonHospital', label: 'Non–hospital-based locations' },
+  { key: 'homeInfusion', label: 'Home Infusion' },
+];
+
+let map;
+let markers = [];
 
 function readConfig(block) {
   const rows = block.querySelectorAll(':scope > div');
@@ -18,12 +28,34 @@ function readConfig(block) {
   return config;
 }
 
-let map;
-let markers = [];
+function parseBool(value, fallback) {
+  if (value === undefined) return fallback;
+  return /^(true|yes|1|on)$/i.test(value);
+}
 
-function createSearchForm() {
+function createSearchForm(settings) {
   const form = document.createElement('div');
   form.className = 'locator-search';
+
+  const distanceOptions = settings.distances
+    .map((d) => `<option value="${d}">${d} miles</option>`)
+    .join('');
+
+  let filtersHtml = '';
+  if (settings.showFilters) {
+    filtersHtml = `
+      <fieldset class="locator-filters">
+        <legend>Show only:</legend>
+        ${FACILITY_TYPES.map((f) => `
+          <label class="locator-filter">
+            <input type="checkbox" name="${f.key}" value="${f.key}">
+            <span>${f.label}</span>
+          </label>
+        `).join('')}
+      </fieldset>
+    `;
+  }
+
   form.innerHTML = `
     <p class="locator-required">*Required field</p>
     <div class="locator-form">
@@ -32,16 +64,11 @@ function createSearchForm() {
         <input type="text" id="locator-zip" placeholder="Enter ZIP code" required>
       </div>
       <div class="locator-select-group">
-        <select id="locator-distance">
-          <option value="25">25 miles</option>
-          <option value="50">50 miles</option>
-          <option value="75">75 miles</option>
-          <option value="100">100 miles</option>
-        </select>
+        <select id="locator-distance">${distanceOptions}</select>
       </div>
       <button class="locator-search-btn" type="button">SEARCH</button>
     </div>
-    <p class="locator-facility-types">Facility Types</p>
+    ${filtersHtml}
   `;
   return form;
 }
@@ -65,18 +92,13 @@ function clearMarkers() {
 }
 
 function addMarker(location, title, info) {
-  const marker = new google.maps.Marker({
-    position: location,
-    map,
-    title,
-  });
-
+  const marker = new google.maps.Marker({ position: location, map, title });
   const infoWindow = new google.maps.InfoWindow({ content: info });
   marker.addListener('click', () => infoWindow.open(map, marker));
   markers.push(marker);
 }
 
-function renderResults(results, resultsContainer) {
+function renderResults(results, resultsContainer, settings) {
   if (!results || results.length === 0) {
     resultsContainer.innerHTML = `
       <h2 class="locator-no-results">No results found</h2>
@@ -97,9 +119,15 @@ function renderResults(results, resultsContainer) {
     const phone = result.phone || result.phoneNumber || '';
     const fullAddress = [address, city, state, zip].filter(Boolean).join(', ');
 
+    // HCP variant surfaces network membership badge when available
+    const networkBadge = settings.showHcpData && result.inNetwork
+      ? '<span class="locator-network-badge">VYEPTI Infusion Network</span>'
+      : '';
+
     html += `
       <li class="locator-result-item">
         <h3>${name}</h3>
+        ${networkBadge}
         <p class="locator-result-address">${fullAddress}</p>
         ${phone ? `<p class="locator-result-phone"><a href="tel:${phone}">${phone}</a></p>` : ''}
       </li>
@@ -129,7 +157,7 @@ async function geocodeZip(zip) {
   });
 }
 
-async function searchLocations(zip, distance, apiUrl) {
+async function searchLocations(zip, distance, settings, activeFilters) {
   const coords = await geocodeZip(zip);
   map.setCenter(coords);
   map.setZoom(10);
@@ -139,16 +167,19 @@ async function searchLocations(zip, distance, apiUrl) {
       latitude: coords.lat,
       longitude: coords.lng,
       radius: distance,
+      showIC: settings.showInfusionCenters,
+      showHCPData: settings.showHcpData,
     });
+    activeFilters.forEach((f) => params.append('filter', f));
 
-    const response = await fetch(`${apiUrl}?${params}`);
+    const response = await fetch(`${settings.apiEndpoint}?${params}`);
     if (response.ok) {
       const data = await response.json();
       return data.results || data.providers || data || [];
     }
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.warn('Coverage API call failed, using fallback:', e);
+    console.warn('Locator API call failed:', e);
   }
 
   return [];
@@ -156,18 +187,24 @@ async function searchLocations(zip, distance, apiUrl) {
 
 export default async function decorate(block) {
   const config = readConfig(block);
-  const apiKey = config['google-maps-api-key'] || DEFAULT_GOOGLE_MAPS_API_KEY;
-  const coverageApi = config['api-endpoint'] || DEFAULT_COVERAGE_API;
+
+  const settings = {
+    apiKey: config['google-maps-api-key'] || DEFAULT_GOOGLE_MAPS_API_KEY,
+    apiEndpoint: config['api-endpoint'] || DEFAULT_API_ENDPOINT,
+    showInfusionCenters: parseBool(config['show-infusion-centers'], true),
+    showHcpData: parseBool(config['show-hcp-data'], false),
+    showFilters: parseBool(config['show-filters'], false),
+    distances: config.distances
+      ? config.distances.split(',').map((d) => d.trim()).filter(Boolean)
+      : DEFAULT_DISTANCES,
+  };
 
   block.textContent = '';
 
-  const searchForm = createSearchForm();
-  const mapContainer = createMapContainer();
+  block.append(createSearchForm(settings));
+  block.append(createMapContainer());
 
-  block.append(searchForm);
-  block.append(mapContainer);
-
-  await loadScript(`https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`);
+  await loadScript(`https://maps.googleapis.com/maps/api/js?key=${settings.apiKey}&libraries=places`);
 
   map = new google.maps.Map(document.getElementById('locator-map'), {
     center: { lat: 37.09, lng: -95.71 },
@@ -189,9 +226,12 @@ export default async function decorate(block) {
     searchBtn.disabled = true;
     clearMarkers();
 
+    const activeFilters = Array.from(block.querySelectorAll('.locator-filters input:checked'))
+      .map((cb) => cb.value);
+
     try {
-      const results = await searchLocations(zip, distanceSelect.value, coverageApi);
-      renderResults(results, resultsContainer);
+      const results = await searchLocations(zip, distanceSelect.value, settings, activeFilters);
+      renderResults(results, resultsContainer, settings);
     } catch (e) {
       resultsContainer.innerHTML = '<p class="locator-error">Unable to search. Please check your input and try again.</p>';
     }

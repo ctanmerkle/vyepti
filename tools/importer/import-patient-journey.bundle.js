@@ -41,6 +41,74 @@ var CustomImportScript = (() => {
     default: () => import_patient_journey_default
   });
 
+  // tools/importer/parsers/story-tiles.js
+  function pickImage(card, document) {
+    const wrapper = card.querySelector(".image-wrapper");
+    if (!wrapper) return null;
+    const directImg = wrapper.querySelector("img[src]");
+    if (directImg && !/mvp-indicator|play-blue|playicon/i.test(directImg.getAttribute("src") || "")) {
+      return directImg;
+    }
+    const sources = [...wrapper.querySelectorAll("picture source[srcset]")];
+    const desktop = sources.find((s) => /min-width:\s*1024px/.test(s.media)) || sources[0];
+    if (!desktop) return null;
+    let src = desktop.srcset.split(",")[0].trim().split(/\s+/)[0];
+    if (src.startsWith("//")) src = `https:${src}`;
+    const title = card.querySelector(".text-title");
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = title ? title.textContent.trim() : "";
+    return img;
+  }
+  function parse(element, { document }) {
+    const cards = element.querySelectorAll(".asset-card");
+    if (!cards.length) return;
+    const cells = [];
+    cards.forEach((card) => {
+      const isVideo = card.dataset.assetType === "video";
+      const image = pickImage(card, document);
+      const body = [];
+      const title = card.querySelector(".text-title");
+      if (title && title.textContent.trim()) {
+        const h = document.createElement("h3");
+        h.textContent = title.textContent.trim();
+        body.push(h);
+      }
+      const desc = card.querySelector(".text-description .text-ellipse, .text-ellipse");
+      if (desc) {
+        desc.querySelectorAll('a[href^="javascript:"]').forEach((a) => {
+          a.replaceWith(...a.childNodes);
+        });
+        desc.normalize();
+        [...desc.children].forEach((child) => {
+          if (child.textContent.trim() || child.querySelector("img")) body.push(child);
+        });
+      }
+      if (isVideo) {
+        const ac = card.querySelector(".assetcard");
+        const videoId = ac == null ? void 0 : ac.dataset.videoId;
+        const accountId = ac == null ? void 0 : ac.dataset.accountId;
+        const playerId = ac == null ? void 0 : ac.dataset.playerId;
+        if (videoId && accountId && playerId) {
+          const p = document.createElement("p");
+          const a = document.createElement("a");
+          const href = `https://players.brightcove.net/${accountId}/${playerId}_default/index.html?videoId=${videoId}`;
+          a.href = href;
+          a.textContent = "Watch video";
+          p.append(a);
+          body.push(p);
+        }
+      }
+      if (!image && body.length === 0) return;
+      cells.push([
+        image || "",
+        body
+      ]);
+    });
+    const block = WebImporter.Blocks.createBlock(document, { name: "story-tiles", cells });
+    element.replaceWith(block);
+  }
+
   // tools/importer/transformers/vyepti-cleanup.js
   var TransformHook = { beforeTransform: "beforeTransform", afterTransform: "afterTransform" };
   function transform(hookName, element, payload) {
@@ -95,6 +163,9 @@ var CustomImportScript = (() => {
   }
 
   // tools/importer/import-patient-journey.js
+  var parsers = {
+    "story-tiles": parse
+  };
   var PAGE_TEMPLATE = {
     name: "patient-journey",
     description: "Patient experience pages with treatment expectations, eligibility, and real patient testimonials",
@@ -104,7 +175,13 @@ var CustomImportScript = (() => {
       "https://www.vyepti.com/real-life-impact",
       "https://www.vyepti.com/real-patient-stories"
     ],
-    blocks: []
+    blocks: [
+      {
+        name: "story-tiles",
+        // Patient story asset-card grid (real-patient-stories). Parser bails on pages without cards.
+        instances: [".columncontainer.section"]
+      }
+    ]
   };
   var transformers = [transform];
   function executeTransformers(hookName, element, payload) {
@@ -117,11 +194,40 @@ var CustomImportScript = (() => {
       }
     });
   }
+  function findBlocksOnPage(document, template) {
+    const pageBlocks = [];
+    template.blocks.forEach((blockDef) => {
+      blockDef.instances.forEach((selector) => {
+        const elements = document.querySelectorAll(selector);
+        if (elements.length === 0) {
+          console.warn(`Block "${blockDef.name}" selector not found: ${selector}`);
+        }
+        elements.forEach((element) => {
+          pageBlocks.push({ name: blockDef.name, selector, element });
+        });
+      });
+    });
+    console.log(`Found ${pageBlocks.length} block instances on page`);
+    return pageBlocks;
+  }
   var import_patient_journey_default = {
     transform: (payload) => {
-      const { document, url, html, params } = payload;
+      const { document, url, params } = payload;
       const main = document.body;
       executeTransformers("beforeTransform", main, payload);
+      const pageBlocks = findBlocksOnPage(document, PAGE_TEMPLATE);
+      pageBlocks.forEach((block) => {
+        const parser = parsers[block.name];
+        if (parser) {
+          try {
+            parser(block.element, { document, url, params });
+          } catch (e) {
+            console.error(`Failed to parse ${block.name} (${block.selector}):`, e);
+          }
+        } else {
+          console.warn(`No parser found for block: ${block.name}`);
+        }
+      });
       executeTransformers("afterTransform", main, payload);
       const hr = document.createElement("hr");
       main.appendChild(hr);
@@ -137,7 +243,7 @@ var CustomImportScript = (() => {
         report: {
           title: document.title,
           template: PAGE_TEMPLATE.name,
-          blocks: []
+          blocks: pageBlocks.map((b) => b.name)
         }
       }];
     }

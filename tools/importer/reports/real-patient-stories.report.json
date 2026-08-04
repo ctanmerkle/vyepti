@@ -2,8 +2,10 @@
   "status": "success",
   "url": "https://www.vyepti.com/real-patient-stories",
   "path": "real-patient-stories",
-  "timestamp": "2026-06-01T18:22:44.377Z",
+  "timestamp": "2026-08-04T14:33:25.682Z",
   "title": "Real VYEPTI® Patient Stories & Reviews",
   "template": "patient-journey",
-  "blocks": []
+  "blocks": [
+    "story-tiles"
+  ]
 }
